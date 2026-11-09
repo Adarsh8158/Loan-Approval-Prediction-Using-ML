@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Admin Dashboard | AI Loan Advisor</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Chart.js for interactive analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Dashboard Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- ==========================================
+         SIDEBAR NAVIGATION
+         ========================================== -->
+    <aside class="sidebar">
+        <div>
+            <!-- Brand -->
+            <div class="sidebar-header">
+                <div class="brand-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="18" rx="3" ry="3"></rect>
+                        <line x1="8" y1="9" x2="16" y2="9"></line>
+                        <line x1="8" y1="13" x2="16" y2="13"></line>
+                        <line x1="8" y1="17" x2="12" y2="17"></line>
+                    </svg>
+                </div>
+                <div class="brand-info">
+                    <h2>LoanAdmin</h2>
+                    <span>AI Loan Advisor</span>
+                </div>
+            </div>
+
+            <!-- Menu Items -->
+            <nav class="nav-menu">
+                <a href="javascript:void(0)" id="navDashboard" class="nav-link active">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                        <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                        <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                        <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                    </svg>
+                    <div class="nav-text">
+                        <span class="nav-title">Dashboard</span>
+                        <span class="nav-subtitle">Overview & stats</span>
+                    </div>
+                    <span class="chevron">›</span>
+                </a>
+
+                <a href="javascript:void(0)" id="navLoanApplications" class="nav-link">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="12" y1="18" x2="12" y2="12"></line>
+                        <line x1="9" y1="15" x2="15" y2="15"></line>
+                    </svg>
+                    <div class="nav-text">
+                        <span class="nav-title">Loan Applications</span>
+                        <span class="nav-subtitle">Manage applications</span>
+                    </div>
+                </a>
+
+                <a href="javascript:void(0)" id="navDisbursement" class="nav-link">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                        <line x1="2" y1="10" x2="22" y2="10"></line>
+                    </svg>
+                    <div class="nav-text">
+                        <span class="nav-title">Loan Disbursement</span>
+                        <span class="nav-subtitle">Process payments</span>
+                    </div>
+                </a>
+
+                <a href="javascript:void(0)" id="navEmiTracking" class="nav-link">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <div class="nav-text">
+                        <span class="nav-title">EMI Tracking</span>
+                        <span class="nav-subtitle">Monitor repayments</span>
+                    </div>
+                </a>
+
+                <a href="javascript:void(0)" id="navDocuments" class="nav-link">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    <div class="nav-text">
+                        <span class="nav-title">Documents</span>
+                        <span class="nav-subtitle">KYC & verification</span>
+                    </div>
+                </a>
+
+                <a href="javascript:void(0)" id="navNotifications" class="nav-link">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <div class="nav-text">
+                        <span class="nav-title">Notifications</span>
+                        <span class="nav-subtitle">Alerts & messages</span>
+                    </div>
+                </a>
+
+                <a href="javascript:void(0)" id="navCustomers" class="nav-link">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <div class="nav-text">
+                        <span class="nav-title">Customers</span>
+                        <span class="nav-subtitle">Customer database</span>
+                    </div>
+                </a>
+
+                <a href="javascript:void(0)" id="navReports" class="nav-link">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    <div class="nav-text">
+                        <span class="nav-title">Reports</span>
+                        <span class="nav-subtitle">Analytics & insights</span>
+                    </div>
+                </a>
+
+                <a href="javascript:void(0)" id="navSupportTickets" class="nav-link">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <div class="nav-text">
+                        <span class="nav-title">Support Tickets</span>
+                        <span class="nav-subtitle">Customer support</span>
+                    </div>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer">
+            <div class="admin-card" id="adminProfileCard" style="cursor:pointer;" title="Click to view Admin Details">
+                <div class="avatar-badge">AD</div>
+                <div class="admin-details">
+                    <span class="admin-name">Bank Admin</span>
+                    <span class="admin-sub">Account & Security →</span>
+                </div>
+            </div>
+
+            <button class="signout-btn" id="btnSignOut">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <!-- ==========================================
+         MAIN CONTENT AREA
+         ========================================== -->
+    <div class="main-wrapper">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <div>
+                    <h1>Bank Admin Dashboard</h1>
+                    <p>AI-Powered Loan Management</p>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <button class="icon-btn" id="topbarBell" title="System Notifications">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                </button>
+                <button class="icon-btn" id="topbarUser" title="User Profile">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </button>
+                <div class="admin-pill" id="topbarAdminPill" style="cursor:pointer;" title="Click to view Status">
+                    ✓ Admin
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Body Content -->
+        <main class="content-container">
+
+            <!-- Hero Banner -->
+            <section class="hero-card">
+                <div class="hero-text">
+                    <h2>Welcome to Admin Dashboard</h2>
+                    <p>Here's an overview of your loan operations</p>
+                </div>
+                <div class="hero-actions">
+                    <div class="pill-badge badge-active" id="badgeActiveStatus" style="cursor:pointer;">
+                        <span>●</span> System Active
+                    </div>
+                    <div class="pill-badge badge-ai" id="badgeAiStatus" style="cursor:pointer;">
+                        <span>✦</span> AI Powered
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4 KPI Summary Cards -->
+            <section class="stats-grid">
+                <div class="kpi-card" id="cardTotalLoans" style="cursor:pointer;" title="Click to view Applications">
+                    <div class="kpi-top">
+                        <span class="kpi-title">Total Loans</span>
+                        <div class="kpi-icon">📄</div>
+                    </div>
+                    <div class="kpi-value" id="kpiTotalLoans">15</div>
+                </div>
+
+                <div class="kpi-card" id="cardTotalDisbursed" style="cursor:pointer;" title="Click to view Disbursements">
+                    <div class="kpi-top">
+                        <span class="kpi-title">Total Disbursed</span>
+                        <div class="kpi-icon">💳</div>
+                    </div>
+                    <div class="kpi-value" id="kpiTotalDisbursed">₹0</div>
+                </div>
+
+                <div class="kpi-card kpi-pending" id="cardPendingReview" style="cursor:pointer;" title="Click to review Pending Loans">
+                    <div class="kpi-top">
+                        <span class="kpi-title">Pending Review</span>
+                        <div class="kpi-icon">⏱</div>
+                    </div>
+                    <div class="kpi-value" id="kpiPendingReview">3</div>
+                </div>
+
+                <div class="kpi-card" id="cardApprovalRate" style="cursor:pointer;" title="Click to view Analytics">
+                    <div class="kpi-top">
+                        <span class="kpi-title">Approval Rate</span>
+                        <div class="kpi-icon">📈</div>
+                    </div>
+                    <div class="kpi-value" id="kpiApprovalRate">40%</div>
+                </div>
+            </section>
+
+            <!-- Charts Row (Donut + Trends) -->
+            <section class="charts-grid">
+                <!-- Loan Status Distribution -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title-icon icon-teal">◷</div>
+                        <h3>Loan Status Distribution</h3>
+                    </div>
+
+                    <div class="donut-wrapper">
+                        <div class="donut-canvas-box">
+                            <canvas id="donutChart"></canvas>
+                        </div>
+
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <span class="legend-dot dot-disbursed"></span>
+                                <span>Disbursed: 1</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-dot dot-approved"></span>
+                                <span>Approved: 1</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-dot dot-pending"></span>
+                                <span>Pending: 0</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-dot dot-rejected"></span>
+                                <span>Rejected: 0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monthly Trends -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title-icon icon-purple">↗</div>
+                        <h3>Monthly Trends</h3>
+                    </div>
+
+                    <div class="line-canvas-box">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bottom Section: EMI Collection & Actions -->
+            <section class="bottom-grid">
+                <div class="chart-card">
+                    <div class="action-bar">
+                        <div class="chart-header" style="margin-bottom:0;">
+                            <div class="chart-title-icon icon-teal">₹</div>
+                            <h3>EMI Collection Trend & Applications</h3>
+                        </div>
+
+                        <button class="btn-primary" id="btnOpenPredictor">
+                            <span>+</span> New Loan Prediction
+                        </button>
+                    </div>
+
+                    <!-- Applications Table -->
+                    <div class="table-responsive">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Loan ID</th>
+                                    <th>Applicant Details</th>
+                                    <th>Loan Amount</th>
+                                    <th>Term</th>
+                                    <th>Status</th>
+                                    <th>Est. Monthly EMI</th>
+                                </tr>
+                            </thead>
+                            <tbody id="applicationsTableBody">
+                                <tr>
+                                    <td>#LN-8102</td>
+                                    <td>Ananya Roy (CIBIL: 790)</td>
+                                    <td>₹1,20,00,000</td>
+                                    <td>10 Yrs</td>
+                                    <td><span class="badge-status status-approved">Approved</span></td>
+                                    <td>₹1,55,277</td>
+                                </tr>
+                                <tr>
+                                    <td>#LN-7945</td>
+                                    <td>Rohit Verma (CIBIL: 580)</td>
+                                    <td>₹65,00,000</td>
+                                    <td>15 Yrs</td>
+                                    <td><span class="badge-status status-rejected">Rejected</span></td>
+                                    <td>₹67,880</td>
+                                </tr>
+                                <tr>
+                                    <td>#LN-7421</td>
+                                    <td>Meera Patel (CIBIL: 720)</td>
+                                    <td>₹40,00,000</td>
+                                    <td>5 Yrs</td>
+                                    <td><span class="badge-status status-approved">Approved</span></td>
+                                    <td>₹84,008</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+</div>
+
+<!-- ==========================================
+     MODAL 1: PREDICTION MODAL (AI EVALUATOR)
+     ========================================== -->
+<div class="modal-overlay" id="predictionModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <div>
+                <h2>AI Loan Approval Prediction</h2>
+                <p style="font-size:12px; color:var(--text-secondary); margin-top:3px;">
+                    Enter applicant profile details to predict approval probability via ML model
+                </p>
+            </div>
+            <button class="modal-close" data-close="predictionModal">✕</button>
+        </div>
+
+        <form id="loanPredictionForm">
+            <div class="form-grid">
+                <div class="form-section-title">1. Applicant Profile</div>
+                <div class="form-group">
+                    <label>Dependents (0 - 5)</label>
+                    <input type="number" name="no_of_dependents" class="form-control" min="0" max="5" value="2" required>
+                </div>
+                <div class="form-group">
+                    <label>Education</label>
+                    <select name="education" class="form-control" required>
+                        <option value="Graduate" selected>Graduate</option>
+                        <option value="Not Graduate">Not Graduate</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Self Employed</label>
+                    <select name="self_employed" class="form-control" required>
+                        <option value="No" selected>No (Salaried)</option>
+                        <option value="Yes">Yes (Business/Self)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Annual Income (₹)</label>
+                    <input type="number" name="income_annum" class="form-control" min="0" value="7500000" required>
+                </div>
+
+                <div class="form-section-title">2. Loan Request & Credit</div>
+                <div class="form-group">
+                    <label>Loan Amount (₹)</label>
+                    <input type="number" name="loan_amount" class="form-control" min="0" value="12000000" required>
+                </div>
+                <div class="form-group">
+                    <label>Loan Tenure (Years)</label>
+                    <input type="number" name="loan_term" class="form-control" min="1" max="30" value="10" required>
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>CIBIL Credit Score (300 - 900)</label>
+                    <input type="number" name="cibil_score" class="form-control" min="300" max="900" value="760" required>
+                </div>
+
+                <div class="form-section-title">3. Asset Valuation (₹)</div>
+                <div class="form-group">
+                    <label>Residential Assets</label>
+                    <input type="number" name="residential_assets_value" class="form-control" min="0" value="8000000" required>
+                </div>
+                <div class="form-group">
+                    <label>Commercial Assets</label>
+                    <input type="number" name="commercial_assets_value" class="form-control" min="0" value="4000000" required>
+                </div>
+                <div class="form-group">
+                    <label>Luxury Assets</label>
+                    <input type="number" name="luxury_assets_value" class="form-control" min="0" value="5000000" required>
+                </div>
+                <div class="form-group">
+                    <label>Bank Assets</label>
+                    <input type="number" name="bank_asset_value" class="form-control" min="0" value="3000000" required>
+                </div>
+            </div>
+
+            <div id="modalResult" class="modal-result"></div>
+
+            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 22px; padding: 13px;">
+                Evaluate Loan Application →
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- ==========================================
+     MODAL 2: LOAN DISBURSEMENT
+     ========================================== -->
+<div class="modal-overlay" id="disbursementModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <div>
+                <h2>Loan Disbursement Center</h2>
+                <p style="font-size:12px; color:var(--text-secondary); margin-top:3px;">
+                    Review verified applications ready for electronic funds transfer
+                </p>
+            </div>
+            <button class="modal-close" data-close="disbursementModal">✕</button>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; margin-bottom:18px;">
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--card-border); border-radius:12px; padding:14px;">
+                <span style="font-size:11.5px; color:var(--text-muted);">Ready to Disburse</span>
+                <h3 style="color:#34d399; font-size:20px; margin-top:4px;">₹1,60,00,000</h3>
+            </div>
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--card-border); border-radius:12px; padding:14px;">
+                <span style="font-size:11.5px; color:var(--text-muted);">Disbursement Pipeline</span>
+                <h3 style="color:#38bdf8; font-size:20px; margin-top:4px;">2 Applications</h3>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Loan ID</th>
+                        <th>Applicant</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="disburseTableBody">
+                    <tr>
+                        <td>#LN-8102</td>
+                        <td>Ananya Roy</td>
+                        <td>₹1,20,00,000</td>
+                        <td><span class="badge-status status-approved">Approved</span></td>
+                        <td><button class="btn-primary" style="padding:6px 12px; font-size:11px;" onclick="processDisburse(this, 12000000)">Disburse Now</button></td>
+                    </tr>
+                    <tr>
+                        <td>#LN-7421</td>
+                        <td>Meera Patel</td>
+                        <td>₹40,00,000</td>
+                        <td><span class="badge-status status-approved">Approved</span></td>
+                        <td><button class="btn-primary" style="padding:6px 12px; font-size:11px;" onclick="processDisburse(this, 4000000)">Disburse Now</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     MODAL 3: EMI TRACKING & CALCULATOR
+     ========================================== -->
+<div class="modal-overlay" id="emiModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <div>
+                <h2>EMI Calculator & Repayment Modeler</h2>
+                <p style="font-size:12px; color:var(--text-secondary); margin-top:3px;">
+                    Simulate monthly repayment schedules based on principal, rate, and tenure
+                </p>
+            </div>
+            <button class="modal-close" data-close="emiModal">✕</button>
+        </div>
+
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Loan Principal (₹): <span id="lblCalcPrincipal" style="color:#38bdf8; font-weight:700;">₹50,00,000</span></label>
+                <input type="range" id="rngPrincipal" min="500000" max="50000000" step="500000" value="5000000" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Tenure (Years): <span id="lblCalcTenure" style="color:#34d399; font-weight:700;">10 Years</span></label>
+                <input type="range" id="rngTenure" min="1" max="30" step="1" value="10" class="form-control">
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1;">
+                <label>Annual Interest Rate (%): <span id="lblCalcRate" style="color:#c084fc; font-weight:700;">9.5%</span></label>
+                <input type="range" id="rngRate" min="7.0" max="18.0" step="0.25" value="9.5" class="form-control">
+            </div>
+        </div>
+
+        <div style="background:rgba(20,184,166,0.12); border:1px solid rgba(20,184,166,0.3); border-radius:14px; padding:18px; margin-top:20px; text-align:center;">
+            <span style="font-size:12px; color:var(--text-secondary);">Estimated Monthly Payment</span>
+            <div style="font-size:32px; font-weight:800; color:#34d399; margin:6px 0;" id="calcMonthlyEmiDisplay">₹64,699</div>
+            <span style="font-size:11px; color:var(--text-muted);">Standard reducing balance formula (P × r × (1+r)ⁿ / ((1+r)ⁿ - 1))</span>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     MODAL 4: DOCUMENTS & KYC VERIFICATION
+     ========================================== -->
+<div class="modal-overlay" id="documentsModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <div>
+                <h2>KYC & Document Verification Portal</h2>
+                <p style="font-size:12px; color:var(--text-secondary); margin-top:3px;">
+                    Automated document checks & compliance audit
+                </p>
+            </div>
+            <button class="modal-close" data-close="documentsModal">✕</button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Document Type</th>
+                        <th>Required Verification</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Aadhaar Card (UIDAI)</td>
+                        <td>Biometric & OTP Match</td>
+                        <td><span class="badge-status status-approved">Verified ✓</span></td>
+                        <td><button class="btn-primary" style="padding:4px 10px; font-size:11px;" onclick="showToast('Document: Aadhaar verified successfully.')">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>PAN Card (ITD)</td>
+                        <td>Name & DOB Cross-verification</td>
+                        <td><span class="badge-status status-approved">Verified ✓</span></td>
+                        <td><button class="btn-primary" style="padding:4px 10px; font-size:11px;" onclick="showToast('Document: PAN card matches CIBIL bureau record.')">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>Bank Statements (6 Mo)</td>
+                        <td>Average Monthly Balance & Salary Credits</td>
+                        <td><span class="badge-status status-pending">In Review ⏱</span></td>
+                        <td><button class="btn-primary" style="padding:4px 10px; font-size:11px;" onclick="showToast('Bank statements processing via FinTech OCR API.')">Audit</button></td>
+                    </tr>
+                    <tr>
+                        <td>Property Deed / Assets</td>
+                        <td>Valuation & Title Clearance</td>
+                        <td><span class="badge-status status-pending">Pending ⏱</span></td>
+                        <td><button class="btn-primary" style="padding:4px 10px; font-size:11px;" onclick="showToast('Legal title search initiated.')">Verify</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     MODAL 5: NOTIFICATIONS CENTER
+     ========================================== -->
+<div class="modal-overlay" id="notificationsModal">
+    <div class="modal-card" style="max-width:540px;">
+        <div class="modal-header">
+            <div>
+                <h2>System Alerts & Notifications</h2>
+                <p style="font-size:12px; color:var(--text-secondary); margin-top:3px;">
+                    Real-time operational alerts
+                </p>
+            </div>
+            <button class="modal-close" data-close="notificationsModal">✕</button>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(16,185,129,0.3); border-radius:12px; padding:12px 16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:12.5px; font-weight:700; color:#34d399;">ML Model Operational</span>
+                    <span style="font-size:10.5px; color:var(--text-muted);">Just now</span>
+                </div>
+                <p style="font-size:12px; color:var(--text-secondary); margin-top:4px;">Random Forest Classifier pipeline running at 98.24% test accuracy.</p>
+            </div>
+
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(234,179,8,0.3); border-radius:12px; padding:12px 16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:12.5px; font-weight:700; color:#fde047;">3 Applications Pending Review</span>
+                    <span style="font-size:10.5px; color:var(--text-muted);">15 mins ago</span>
+                </div>
+                <p style="font-size:12px; color:var(--text-secondary); margin-top:4px;">Borrower documentation submitted, awaiting risk committee sign-off.</p>
+            </div>
+
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(56,189,248,0.3); border-radius:12px; padding:12px 16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:12.5px; font-weight:700; color:#38bdf8;">SQLite Database Synced</span>
+                    <span style="font-size:10.5px; color:var(--text-muted);">1 hour ago</span>
+                </div>
+                <p style="font-size:12px; color:var(--text-secondary); margin-top:4px;">Persistent prediction audit log up to date with zero integrity conflicts.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     MODAL 6: CUSTOMERS DATABASE
+     ========================================== -->
+<div class="modal-overlay" id="customersModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <div>
+                <h2>Customer & Applicant Database</h2>
+                <p style="font-size:12px; color:var(--text-secondary); margin-top:3px;">
+                    Directory of registered applicants & credit histories
+                </p>
+            </div>
+            <button class="modal-close" data-close="customersModal">✕</button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Customer Name</th>
+                        <th>CIBIL Score</th>
+                        <th>Annual Income</th>
+                        <th>Total Assets</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ananya Roy</td>
+                        <td>790 (Excellent)</td>
+                        <td>₹85,00,000</td>
+                        <td>₹2.7 Cr</td>
+                        <td><span class="badge-status status-approved">Approved</span></td>
+                    </tr>
+                    <tr>
+                        <td>Rohit Verma</td>
+                        <td>580 (Moderate)</td>
+                        <td>₹32,00,000</td>
+                        <td>₹75 Lakh</td>
+                        <td><span class="badge-status status-rejected">Rejected</span></td>
+                    </tr>
+                    <tr>
+                        <td>Meera Patel</td>
+                        <td>720 (Good)</td>
+                        <td>₹60,00,000</td>
+                        <td>₹1.8 Cr</td>
+                        <td><span class="badge-status status-approved">Approved</span></td>
+                    </tr>
+                    <tr>
+                        <td>Vikram Singh</td>
+                        <td>810 (Excellent)</td>
+                        <td>₹1,10,00,000</td>
+                        <td>₹4.5 Cr</td>
+                        <td><span class="badge-status status-approved">Approved</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     MODAL 7: REPORTS & ANALYTICS
+     ========================================== -->
+<div class="modal-overlay" id="reportsModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <div>
+                <h2>ML Model Performance & Evaluation Report</h2>
+                <p style="font-size:12px; color:var(--text-secondary); margin-top:3px;">
+                    Validation metrics across Random Forest, Gradient Boosting, & Logistic Regression
+                </p>
+            </div>
+            <button class="modal-close" data-close="reportsModal">✕</button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Algorithm</th>
+                        <th>Accuracy</th>
+                        <th>ROC-AUC</th>
+                        <th>F1 Score</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Random Forest Classifier</strong></td>
+                        <td style="color:#34d399; font-weight:700;">98.24%</td>
+                        <td style="color:#c084fc; font-weight:700;">99.87%</td>
+                        <td style="color:#34d399; font-weight:700;">98.24%</td>
+                        <td><span class="badge-status status-approved">Selected Model</span></td>
+                    </tr>
+                    <tr>
+                        <td>Gradient Boosting</td>
+                        <td>97.65%</td>
+                        <td>99.20%</td>
+                        <td>97.58%</td>
+                        <td><span class="badge-status status-pending">Benchmark</span></td>
+                    </tr>
+                    <tr>
+                        <td>Logistic Regression</td>
+                        <td>92.15%</td>
+                        <td>95.40%</td>
+                        <td>91.80%</td>
+                        <td><span class="badge-status status-pending">Baseline</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top:18px; padding:14px; background:rgba(255,255,255,0.02); border:1px solid var(--card-border); border-radius:12px;">
+            <h4 style="font-size:13px; color:#ffffff; margin-bottom:6px;">Key Predictive Insights</h4>
+            <p style="font-size:12px; color:var(--text-secondary); line-height:1.6;">
+                1. <strong>CIBIL Score</strong> is the single highest predictor of loan approval (>80% feature weight).<br>
+                2. Applicants with CIBIL score ≥ 650 and asset coverage exceeding loan amount demonstrate a <strong>95.8% approval rate</strong>.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     MODAL 8: SUPPORT TICKETS
+     ========================================== -->
+<div class="modal-overlay" id="supportModal">
+    <div class="modal-card" style="max-width:540px;">
+        <div class="modal-header">
+            <div>
+                <h2>Customer Support & Helpdesk</h2>
+                <p style="font-size:12px; color:var(--text-secondary); margin-top:3px;">
+                    Submit technical queries or report system exceptions
+                </p>
+            </div>
+            <button class="modal-close" data-close="supportModal">✕</button>
+        </div>
+
+        <form onsubmit="handleSupportSubmit(event)">
+            <div class="form-group" style="margin-bottom:12px;">
+                <label>Issue Subject</label>
+                <input type="text" class="form-control" placeholder="e.g. CIBIL Bureau API connectivity" required>
+            </div>
+            <div class="form-group" style="margin-bottom:12px;">
+                <label>Priority</label>
+                <select class="form-control">
+                    <option>Standard</option>
+                    <option>High</option>
+                    <option>Urgent</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom:16px;">
+                <label>Description</label>
+                <textarea class="form-control" rows="3" placeholder="Describe the inquiry or anomaly..." required></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">Submit Support Ticket →</button>
+        </form>
+    </div>
+</div>
+
+<!-- ==========================================
+     MODAL 9: ADMIN PROFILE
+     ========================================== -->
+<div class="modal-overlay" id="profileModal">
+    <div class="modal-card" style="max-width:480px;">
+        <div class="modal-header">
+            <div>
+                <h2>Admin Profile & Security</h2>
+                <p style="font-size:12px; color:var(--text-secondary); margin-top:3px;">
+                    Active credentials & authorization tier
+                </p>
+            </div>
+            <button class="modal-close" data-close="profileModal">✕</button>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:16px; margin-bottom:18px;">
+            <div class="avatar-badge" style="width:48px; height:48px; font-size:16px;">AD</div>
+            <div>
+                <h3 style="font-size:16px; color:#ffffff;">Vinay (Bank Admin)</h3>
+                <p style="font-size:12px; color:var(--text-muted);">Lead Credit Risk Officer • ID: #ADM-0042</p>
+            </div>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.03); border:1px solid var(--card-border); border-radius:12px; padding:14px; font-size:12.5px; color:var(--text-secondary); display:flex; flex-direction:column; gap:8px;">
+            <div>Role: <strong style="color:#ffffff;">Super Administrator</strong></div>
+            <div>Access Level: <strong style="color:#34d399;">Full Read/Write & ML Inference</strong></div>
+            <div>MFA Security: <strong style="color:#34d399;">Enabled (TOTP)</strong></div>
+            <div>Session Status: <strong style="color:#38bdf8;">Active (Localhost)</strong></div>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     TOAST NOTIFICATION (Matching reference image)
+     ========================================== -->
+<div class="toast-box" id="welcomeToast">
+    <h4 id="toastTitle">Welcome back, Vinay</h4>
+    <p id="toastMessage">You have successfully logged in to the admin dashboard.</p>
+</div>
+
+<!-- Scripts -->
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
