@@ -204,6 +204,3 @@ This project is developed for educational and portfolio purposes. Its prediction
 - GitHub: [Adarsh8158](https://github.com/Adarsh8158)
 - LinkedIn: [Adarsh Yadav](https://www.linkedin.com/in/adarsh-yadav-49225140b)
 
----
-
-*Developed as a Machine Learning and Web Application project.*
